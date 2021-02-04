@@ -5,15 +5,15 @@
 #include<stdlib.h>
 #include<time.h>
 #define MAX 100
-int high,width;//ï¿½ï¿½Í¼ï¿½ß¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
-int bird_x,bird_y;//Ð¡ï¿½ï¿½ï¿½Î»ï¿½ï¿½ 
-int through,wall;//Í¨ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½y 
-int map[MAX][MAX];//ï¿½ï¿½Â¼Ò³ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ 
-/*0ï¿½ï¿½ï¿½ï¿½ï¿½Õ°×£ï¿½1ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½2ï¿½ï¿½ï¿½ï¿½Ç½
-3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§Ç½ï¿½ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§Ç½*/ 
-bool book[MAX][MAX];//ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½Î§Ç½
-int score;//ï¿½ï¿½Â¼ï¿½Ã·ï¿½ 
-bool result = 0;//ï¿½ï¿½Ï·ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½0ï¿½ï¿½ï¿½ï¿½Ê¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶Ó®ï¿½ï¿½ï¿½ï¿½~~ 
+int high,width;//µØÍ¼¸ß¶ÈÓë¿í¶È 
+int bird_x,bird_y;//Ð¡ÄñµÄÎ»ÖÃ 
+int through,wall;//Í¨µÀµÄx×ø±êºÍÇ½µÄÆðÊ¼×ø±êy 
+int map[MAX][MAX];//¼ÇÂ¼Ò³ÃæµÄÏÔÊ¾ 
+/*0´ú±í¿Õ°×£¬1´ú±íÐ¡ÄñµÄÎ»ÖÃ£¬2´ú±íÇ½
+3´ú±íÉÏÏÂÎ§Ç½£¬4´ú±í×óÓÒÎ§Ç½*/ 
+bool book[MAX][MAX];//´ú±í¸ÄµãÓÐÎ§Ç½
+int score;//¼ÇÂ¼µÃ·Ö 
+bool result = 0;//ÓÎÏ·½á¹û1´ú±íÊ§°Ü£¬0´ú±íÊ¤Àû£¬²»¹ýÓÀÔ¶Ó®²»ÁË~~ 
 void startup()
 {
     score = 0;
@@ -34,32 +34,32 @@ void startMap()
             map[i][j] = 0;
         map[i][width] = 4;
     }
-    //ï¿½Â·ï¿½Î§Ç½ï¿½Ä³ï¿½Ê¼ï¿½ï¿½ 
+    //ÏÂ·½Î§Ç½µÄ³õÊ¼»¯ 
     i = high;
     for(j=1;j<=width;j++)
         map[i][j] = 3;
-    //Ð¡ï¿½ï¿½Î»ï¿½ÃµÄ³ï¿½Ê¼ï¿½ï¿½ 
+    //Ð¡ÄñÎ»ÖÃµÄ³õÊ¼»¯ 
     map[bird_x][bird_y] = 1;
 
-    //Ç½ï¿½Ä³ï¿½Ê¼ï¿½ï¿½
+    //Ç½µÄ³õÊ¼»¯
     for(i=1;i<=high-1;i++)
     {
         map[i][wall] = 2;
         book[i][wall] = 1;  
     }
-    //Í¨ï¿½ï¿½ï¿½Ä³ï¿½Ê¼ï¿½ï¿½
-    for(i=through-2;i<=through+2;i++)//Í¨ï¿½ï¿½ï¿½Ä´ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½.
+    //Í¨µÀµÄ³õÊ¼»¯
+    for(i=through-2;i<=through+2;i++)//Í¨µÀµÄ´óÐ¡¿ÉÒÔ×Ô¶¨Òå.
     {
         map[i][wall] = 0;
         book[i][wall] = 0;
     }
 }
-void HideCursor()//ï¿½ï¿½ï¿½Ø¹ï¿½ï¿½ 
+void HideCursor()//Òþ²Ø¹â±ê 
 {
     CONSOLE_CURSOR_INFO cursor_info = {1, 0}; 
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
 }
-void gotoxy(int x,int y)//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä» 
+void gotoxy(int x,int y)//ÇåÀíÒ»²¿·ÖÆÁÄ» 
 {
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD pos;
@@ -67,15 +67,15 @@ void gotoxy(int x,int y)//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»
     pos.Y = y;
     SetConsoleCursorPosition(handle,pos);
 }
-void UPdatewithOutinput()//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¹ØµÄ¸ï¿½ï¿½ï¿½ 
+void UPdatewithOutinput()//ÓëÊäÈëÎÞ¹ØµÄ¸üÐÂ 
 {
     bird_x++;
     wall--;
-    if(book[bird_x][bird_y] == 1 || bird_x > high)//ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê± 
+    if(book[bird_x][bird_y] == 1 || bird_x > high)//µ±Ð¡ÄñËÀÍöÊ± 
     {
         result = 1;
     }
-    if(wall == bird_y-1)//ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ß¹ï¿½Ç½Ê±ï¿½ï¿½Ò»ï¿½ï¿½ 
+    if(wall == bird_y-1)//µ±Ð¡Äñ×ß¹ýÇ½Ê±µÃÒ»·Ö 
         score++; 
     if(wall < 1)
     {
@@ -97,11 +97,11 @@ void UPdatewithOutinput()//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¹ØµÄ¸ï¿½ï¿½ï¿½
 void UPdatewithinput()
 {
     char input;
-    if(kbhit())//ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+    if(kbhit())//ÅÐ¶ÏÊÇ·ñÓÐ¼üÅÌÊäÈë 
     {
         input = getch();
         if(input == ' ')
-            bird_x -= 2;//Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½ 
+            bird_x -= 2;//Ð¡ÄñÏòÉÏ±ÄÁ½¸ñ 
     }
 }
 void show()
@@ -133,8 +133,8 @@ void show()
         }
         printf("\n");
     }
-    printf("ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½:%d\n\n",score);
-    printf("ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½:ï¿½Õ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½\n");
+    printf("ÄãµÄ·ÖÊýÊÇ:%d\n\n",score);
+    printf("²Ù×÷ËµÃ÷:¿Õ¸ñ¼üÏòÉÏÒÆ¶¯\n");
 }
 int main(void)
 {
@@ -151,7 +151,7 @@ int main(void)
         UPdatewithinput();
     }
     system("cls");
-    printf("ï¿½ï¿½ÄµÃ·ï¿½ï¿½ï¿½%d\n\n",score);
-    printf("ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î°ï¿½");                          
+    printf("ÄãµÄµÃ·ÖÊÇ%d\n\n",score);
+    printf("ÔÙÊÔÒ»´Î°É");                          
     return 0;
 }
